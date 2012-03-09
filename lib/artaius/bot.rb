@@ -1,5 +1,3 @@
-require 'yaml'
-
 module Artaius
   class Bot < Cinch::Bot
 
