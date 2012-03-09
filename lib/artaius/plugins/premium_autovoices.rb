@@ -17,10 +17,8 @@ module Artaius
       # Listens to joins and gives a voice, if the joined user owns premium.
       def listen(m)
         # Defy unauthenticated players.
-        if m.user.authed?
-          if m.user.nick != bot.nick
-            m.channel.voice(m.user) if premium?(m.user.authname)
-          end
+        if m.user.authed? && m.user.nick != bot.nick
+          m.channel.voice(m.user) if premium?(m.user.authname)
         end
       end
 
