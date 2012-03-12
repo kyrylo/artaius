@@ -1,8 +1,8 @@
 module Artaius
   module Plugin
+    ###
+    # The plugin authenticates Artaius on QuakeNet IRC server.
     class QuakenetIdentify
-      ###
-      # The plugin authenticates Artaius on QuakeNet server.
       include Cinch::Plugin
 
       listen_to :connect, method: :identify
