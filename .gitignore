@@ -1,2 +1,3 @@
 lib/artaius/plugins/configs/quakenet_identify.yml
 .rake_tasks~
+db/*.db
