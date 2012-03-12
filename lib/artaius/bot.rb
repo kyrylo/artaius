@@ -5,8 +5,8 @@ module Artaius
 
     def initialize
       super
-      # Since I don't want to tell this cruel
-      # world the password, hide it in the abyss.
+      # Since I don't want to tell this cruel world
+      # the password, let's hide it in the abyss.
       path = 'lib/artaius/plugins/configs/quakenet_identify.yml'
       auth_password = YAML::load(File.open(path))['auth_password']
 
@@ -20,7 +20,7 @@ module Artaius
         c.channels = ['#kag2d.ru-artaius']
         c.plugins.plugins = [
           Plugin::QuakenetIdentify,
-          Plugin::PremiumAutovoices
+          Plugin::AutovoicePremiums
         ]
 
         # Set up plugins.
