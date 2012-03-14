@@ -27,17 +27,21 @@ module Artaius
       # Creates a new record, if player doesn't exist in database.
       # Returns true, if the the player has premium account.
       def premium?(player)
-        irc_authname = { :irc_authname => player.authname }
-        create_new(player) unless Player.exists?(irc_authname)
-        Player.premium?(irc_authname)
+        authname = player.authname
+        irc_authname = { :irc_authname => authname }
+        kag_player = find_kag_player(authname)
+
+        if kag_player
+          create_new(kag_player, authname) unless Player.exists?(irc_authname)
+          Player.premium?(irc_authname)
+        end
       end
 
       # Creates a new player in database.
-      def create_new(player)
-        kag_player = find_kag_player(player)
-        Player.create(:irc_authname => player.authname,
-                      :kag_name     => kag_player[:kag_name],
-                      :premium      => kag_player[:premium])
+      def create_new(player, authname)
+        Player.create(:irc_authname => authname,
+                      :kag_name     => player[:kag_name],
+                      :premium      => player[:premium])
       end
 
     end
