@@ -45,29 +45,16 @@ module Artaius
           # Return, if the registered player is trying to register once again.
           if Player.first(:kag_name.ilike(kag_name))
             return m.reply "Player #{kag_name} has already been registered."
+          elsif Token.requested_before?(:requester_authname => m.user.authname)
+            m.reply "You've already asked for registration!"
+          else
+            authorize_bot!
+            create_token(m, kag_name)
           end
 
-          authorize_bot!
-
-          # If the forum user exists, create a registration token,
-          # store it into database and then send it to user.
-          forum_user_page = find_forum_user(m, kag_name)
-          if forum_user_page
-            token = generate_token
-            creation_date = Time.now
-            Token.create(:requester_authname => m.user.authname,
-                         :kag_name           => kag_name,
-                         :token              => token,
-                         :created_at         => creation_date,
-                         :expires_at         => creation_date + 300)
-            send_token_to_player!(m, kag_name, forum_user_page, token)
-            m.reply 'Registration token and further instructions ' +
-                    'have been sent to you on KAG forum. ' +
-                    'Check your inbox: https://forum.kag2d.com/conversations/'
-          end
         else
-          m.reply 'Sorry, you should be authenticated
-                   on server, in order to register'
+          m.reply 'Sorry, you should be authenticated' +
+                  'on server, in order to register'
         end
       end
 
@@ -75,32 +62,65 @@ module Artaius
       # asked for registration and lodged a valid token.
       def register_user(m, presented_token)
         if m.user.authed?
-          user = m.user
-          registrant = Token[:requester_authname => user.authname]
+          requester_authname = { :requester_authname => m.user.authname }
+          if Player.exists?(:irc_authname => m.user.authname)
+            return
+          elsif Token.requested_before?(requester_authname)
+            registrant = Token.filter(requester_authname).order(:id).last
+          else
+            return m.reply "You haven't asked for registration. Write " +
+                           "!reg #{m.user.authname} in the first place."
+          end
 
           # If someone, who hasn't asked for registration decided to
           # write !token message, then return from method execution.
           unless registrant
-            m.reply "You haven't asked for registration or your
-                     token expired. Write !reg Your_KAG_Nickname."
+            m.reply "You haven't asked for registration or your " +
+                    'token expired. Write !reg Your_KAG_Nickname.'
             return nil
           end
 
-          # Create new player, if token is valid and hasn't expired yet.
-          if presented_token == registrant[:token] && !registrant.token_expired?
+          if presented_token != registrant[:token]
+            return m.reply 'Invalid token.'
+          end
 
+          # Create new player, if token is valid and hasn't expired yet.
+          unless registrant.expired?
             Player.create(
               :irc_authname => registrant[:requester_authname],
               :kag_name     => registrant[:kag_name],
-              :premium      => find_kag_player(user)[:premium]
+              :premium      => registrant[:premium]
             )
 
-            m.reply "You've been successfully registered!"
+            m.reply "You've been successfully registered! " +
+                    "We know, that you are #{registrant[:requester_authname]}. " +
+                    "Your KAG nickname is #{registrant[:kag_name]}. " +
+                    "You have #{registrant[:premium] ? 'premium' : 'regular'} account. "
           end
         end
       end
 
       protected
+
+      # If the forum user exists, create a registration token,
+      # store it into database and then send it to user.
+      def create_token(m, kag_name)
+        forum_user_page = find_forum_user(m, kag_name)
+        if forum_user_page
+          token = generate_token
+          creation_date = Time.now
+          Token.create(:requester_authname => m.user.authname,
+                       :kag_name           => kag_name,
+                       :token              => token,
+                       :premium            => find_kag_player(kag_name)[:premium],
+                       :created_at         => creation_date,
+                       :expires_at         => creation_date + 300)
+          send_token_to_player!(m, kag_name, forum_user_page, token)
+          m.reply 'Registration token and further instructions ' +
+                  'have been sent to you on KAG forum. ' +
+                  'Check your inbox: https://forum.kag2d.com/conversations/'
+        end
+      end
 
       # Authorizes IRC bot at KAG's forum.
       def authorize_bot!
