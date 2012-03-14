@@ -3,8 +3,8 @@ require 'cinch'
 require 'sequel'
 require 'sequel/extensions/migration'
 
+require 'mechanize'
 require 'open-uri'
-require 'nokogiri'
 require 'yaml'
 
 ENV['DB_PATH'] = File.expand_path('db')
