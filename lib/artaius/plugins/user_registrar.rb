@@ -157,11 +157,11 @@ module Artaius
         title    = message_form.field_with(:name => 'title')
         message  = message_form.field_with(:name => 'message')
 
-        title.value   = "#{Artaius::Bot::NICK} registration token: #{token}"
+        title.value   = "#{Bot::NICK} registration token: #{token}"
         message.value = "Someone with IRC auth name #{m.user.authname} " +
                         'requested registration of your KAG nickname ' +
                         "#{kag_name}. If it were you, then respond to " +
-                        "#{Artaius::Bot::NICK} with the following message:\n" +
+                        "#{Bot::NICK} with the following message:\n" +
                         "\n!token #{token}\n\nOtherwise, ignore this message."
 
         @agent.submit(message_form)
