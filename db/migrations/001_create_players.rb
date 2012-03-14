@@ -16,9 +16,9 @@ Sequel.migration do
   change do
     create_table :players do
       primary_key :id
-      String      :irc_authname,  :unique  => true, :size => 15, :null => false
-      String      :kag_name,      :unique  => true, :size => 20, :null => false
-      FalseClass  :premium,       :default => false
+      String      :irc_authname, :unique  => true, :size => 15, :null => false
+      String      :kag_name,     :unique  => true, :size => 20, :null => false
+      FalseClass  :premium,      :default => false
       DateTime    :created_at
       DateTime    :updated_at
     end
