@@ -16,12 +16,12 @@ Sequel.migration do
   change do
     create_table :tokens do
       primary_key :id
-      String      :requester_authname, :unique => true, :size => 15, :null => false
-      String      :kag_name,           :unique => true, :size => 20, :null => false
+      String      :requester_authname, :size => 15, :null => false
+      String      :kag_name,           :size => 20, :null => false
       FalseClass  :premium,            :default => false
-      String      :token,              :unique => true, :size => 8,  :null => false
-      DateTime    :created_at,         :null => false
-      DateTime    :expires_at,         :null => false
+      String      :token,              :unique  => true, :size => 8, :null => false
+      DateTime    :created_at,         :null    => false
+      DateTime    :expires_at,         :null    => false
     end
   end
 end
