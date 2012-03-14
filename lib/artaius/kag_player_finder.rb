@@ -8,7 +8,7 @@ module Artaius
     # Finds requisites of the player at KAG's website. Returns a hash with the
     # player's game nick and his account type (true, if premium account).
     def find_kag_player(player)
-      http_name = player.authname.gsub(/[^0-9\w]/, '')
+      http_name = player.gsub(/[^0-9\w]/, '')
       doc = Nokogiri::HTML open(KAG_WEBSITE + http_name.downcase)
 
       kag_name = doc.css('#profile .info h1').text.strip
@@ -17,7 +17,7 @@ module Artaius
 
       return { :kag_name => kag_name, :premium => premium }
     rescue OpenURI::HTTPError
-      puts "There is no KAG player with such a nickname: #{player.authname}"
+      puts "There is no KAG player with such a nickname: #{player}"
     end
 
   end
