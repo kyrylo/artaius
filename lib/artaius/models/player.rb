@@ -3,13 +3,13 @@ module Artaius
     plugin :timestamps, :update_on_create => true
 
     # Returns true, if the player exists in database.
-    def self.exists?(player)
-      !self[:irc_authname => player.authname].nil?
+    def self.exists?(value)
+      !self.first(value).nil?
     end
 
     # Returns true, if the player has premium account.
-    def self.premium?(player)
-      self[:irc_authname => player.authname][:premium]
+    def self.premium?(value)
+      self[value][:premium]
     end
 
   end
