@@ -28,7 +28,7 @@ module Artaius
       include Artaius::KAGPlayerFinder
 
       # KAG's official forum.
-      KAG_FORUM = 'https://forum.kag2d.com/'
+      KAG_FORUM_URI = 'https://forum.kag2d.com/'
 
       react_on :private
 
@@ -119,7 +119,7 @@ module Artaius
 
       # Authorizes IRC bot at KAG's forum.
       def authorize_bot!
-        login_page = @agent.get(KAG_FORUM + 'login/')
+        login_page = @agent.get(KAG_FORUM_URI + 'login/')
         login_form = login_page.form_with(:id => 'pageLogin')
 
         username_field = login_form.field_with(:name => 'login')
@@ -133,7 +133,7 @@ module Artaius
 
       # Returns page with 
       def find_forum_user(m, forum_name)
-        @agent.get(KAG_FORUM + "conversations/add?to=#{forum_name}")
+        @agent.get(KAG_FORUM_URI + "conversations/add?to=#{forum_name}")
       rescue Mechanize::ResponseCodeError => e
         case e.message
         when /403|404/
