@@ -44,17 +44,16 @@ module Artaius
 
           # Return, if the registered player is trying to register once again.
           if Player.first(:kag_name.ilike(kag_name))
-            return m.reply "Player #{kag_name} has already been registered."
+            return m.reply Message::AlreadyRegistered[kag_name]
           elsif Token.requested_before?(:requester_authname => m.user.authname)
-            m.reply "You've already asked for registration!"
+            m.reply Message::RepeatedRegistrationAttempt
           else
             authorize_bot!
             create_token(m, kag_name)
           end
 
         else
-          m.reply 'Sorry, you should be authenticated' +
-                  'on server, in order to register'
+          m.reply Message::AuthExaction
         end
       end
 
@@ -68,20 +67,18 @@ module Artaius
           elsif Token.requested_before?(requester_authname)
             registrant = Token.filter(requester_authname).order(:id).last
           else
-            return m.reply "You haven't asked for registration. Write " +
-                           "!reg #{m.user.authname} in the first place."
+            return m.reply Message::FallaciousToken[m.user.authname]
           end
 
           # If someone, who hasn't asked for registration decided to
           # write !token message, then return from method execution.
           unless registrant
-            m.reply "You haven't asked for registration or your " +
-                    'token expired. Write !reg Your_KAG_Nickname.'
+            m.reply Message::TokenExpired
             return nil
           end
 
           if presented_token != registrant[:token]
-            return m.reply 'Invalid token.'
+            return m.reply Message::InvalidToken
           end
 
           # Create new player, if token is valid and hasn't expired yet.
@@ -92,10 +89,10 @@ module Artaius
               :premium      => registrant[:premium]
             )
 
-            m.reply "You've been successfully registered! " +
-                    "We know, that you are #{registrant[:requester_authname]}. " +
-                    "Your KAG nickname is #{registrant[:kag_name]}. " +
-                    "You have #{registrant[:premium] ? 'premium' : 'regular'} account. "
+            m.reply Message::SuccessfulRegistration[
+              registrant[:requester_authname],
+              registrant[:kag_name]
+            ]
           end
         end
       end
@@ -116,9 +113,7 @@ module Artaius
                        :created_at         => creation_date,
                        :expires_at         => creation_date + 300)
           send_token_to_player!(m, kag_name, forum_user_page, token)
-          m.reply 'Registration token and further instructions ' +
-                  'have been sent to you on KAG forum. ' +
-                  'Check your inbox: https://forum.kag2d.com/conversations/'
+          m.reply Message::TokenCreation
         end
       end
 
@@ -142,8 +137,7 @@ module Artaius
       rescue Mechanize::ResponseCodeError => e
         case e.message
         when /403|404/
-          m.reply "KAG player #{forum_name} doesn't exist. " +
-                  'Did you misspell it? Try again.'
+          m.reply Message::NonexistentPlayer[forum_name]
           nil
         else
           puts e
@@ -157,12 +151,9 @@ module Artaius
         title    = message_form.field_with(:name => 'title')
         message  = message_form.field_with(:name => 'message')
 
-        title.value   = "#{Bot::NICK} registration token: #{token}"
-        message.value = "Someone with IRC auth name #{m.user.authname} " +
-                        'requested registration of your KAG nickname ' +
-                        "#{kag_name}. If it were you, then respond to " +
-                        "#{Bot::NICK} with the following message:\n" +
-                        "\n!token #{token}\n\nOtherwise, ignore this message."
+        title.value   = Message::ForumPMTitle[Bot::NICK, token]
+        message.value = Message::ForumPMText[m.user.authname, kag_name,
+                                             Bot::NICK, token]
 
         @agent.submit(message_form)
       end
