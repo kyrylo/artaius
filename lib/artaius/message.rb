@@ -1,14 +1,17 @@
 module Artaius
   class Message
 
+   ###
+   # Plugins
+   #
+
+   #
+   # UserRegistrar
+   #
     TokenCreation = 'Registration token and further instructions have been sent to you on KAG forum. Check your inbox: https://forum.kag2d.com/conversations/'
-
     AuthExaction = 'Sorry, you should be authenticated on server, in order to register.'
-
     RepeatedRegistrationAttempt = "You've already asked for registration!"
-
     InvalidToken = 'Invalid token.'
-
     TokenExpired = "You haven't asked for registration or your token expired. Write !reg Your_KAG_Nickname."
 
     class NonexistentPlayer < Message
@@ -35,7 +38,6 @@ module Artaius
       end
     end
 
-
     class ForumPMTitle < Message
       def self.[](*args)
         "%s registration token: %s" % [*args]
@@ -54,6 +56,8 @@ TEXT
         text % [*args]
       end
     end
+   #
+   ###
 
   end
 end
