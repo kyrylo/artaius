@@ -12,6 +12,7 @@ module Artaius
     AuthExaction = 'Sorry, you should be authenticated on server, in order to register.'
     RepeatedRegistrationAttempt = "You've already asked for registration!"
     InvalidToken = 'Invalid token.'
+    Banned = 'You are banned, because you have exhausted all 3 attempts to register. Write !unban command, if you want to unban yourself. We will consider your request as soon as possible.'
 
     class NonexistentPlayer < Message
       def self.[](*args)

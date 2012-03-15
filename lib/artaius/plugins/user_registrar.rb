@@ -39,13 +39,15 @@ module Artaius
       # name and has provided existing KAG username with !reg command.
       def execute(m, kag_name)
         if m.user.authed?
+          return m.reply Message::Banned if banned?(m.user.authname)
+
           @agent = Mechanize.new
           @agent.user_agent_alias = 'Linux Mozilla'
 
           # Return, if the registered player is trying to register once again.
           if Player.first(:kag_name.ilike(kag_name))
-            return m.reply Message::AlreadyRegistered[kag_name]
-          elsif Token.requested_before?(:requester_authname => m.user.authname)
+            m.reply Message::AlreadyRegistered[kag_name]
+          elsif Token.requested_before?(requester_authname)
             m.reply Message::RepeatedRegistrationAttempt
           else
             authorize_bot!
@@ -94,6 +96,12 @@ module Artaius
       end
 
       protected
+
+      # Checks, if user was banned (requested bot
+      # for registration at least three times).
+      def banned?(user)
+        Token.filter(:requester_authname => user).all.count >= 3
+      end
 
       # If the forum user exists, create a registration token,
       # store it into database and then send it to user.
