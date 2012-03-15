@@ -62,19 +62,15 @@ module Artaius
       def register_user(m, presented_token)
         if m.user.authed?
           requester_authname = { :requester_authname => m.user.authname }
+
           if Player.exists?(:irc_authname => m.user.authname)
-            return
+            return # Do not respond.
           elsif Token.requested_before?(requester_authname)
             registrant = Token.filter(requester_authname).order(:id).last
           else
-            return m.reply Message::FallaciousToken[m.user.authname]
-          end
-
           # If someone, who hasn't asked for registration decided to
           # write !token message, then return from method execution.
-          unless registrant
-            m.reply Message::TokenExpired
-            return nil
+            return m.reply Message::FallaciousToken[m.user.authname]
           end
 
           if presented_token != registrant[:token]

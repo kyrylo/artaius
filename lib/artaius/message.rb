@@ -12,7 +12,6 @@ module Artaius
     AuthExaction = 'Sorry, you should be authenticated on server, in order to register.'
     RepeatedRegistrationAttempt = "You've already asked for registration!"
     InvalidToken = 'Invalid token.'
-    TokenExpired = "You haven't asked for registration or your token expired. Write !reg Your_KAG_Nickname."
 
     class NonexistentPlayer < Message
       def self.[](*args)
