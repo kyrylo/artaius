@@ -5,4 +5,9 @@ namespace :db do
     from = ENV['FROM'].to_i
     Artaius::Database.migrate(to, from)
   end
+
+  desc 'Roll the database back a version'
+  task :rollback => :environment do
+    Artaius::Database.rollback
+  end
 end
