@@ -40,14 +40,4 @@ module Artaius
     puts "There is no KAG player with such a nickname: #{player}"
   end
 
-  # Returns a page with an open empty conversation form, if the forum name exists. If the
-  def self.find_forum_user(m, forum_name)
-    @agent.get(KAG_FORUM_URI + "conversations/add?to=#{forum_name}")
-  rescue Mechanize::ResponseCodeError => e
-    case e.message
-    when /403|404/
-      m.reply Message::NonexistentPlayer[forum_name] and nil
-    end
-  end
-
 end
