@@ -8,7 +8,6 @@ module Artaius
     # because currently KAG has no any kind of API.
     class AutovoicePremiums
       include Cinch::Plugin
-      include Artaius::KAGPlayerFinder
 
       listen_to :join
 
@@ -29,7 +28,7 @@ module Artaius
       def premium?(player)
         authname = player.authname
         irc_authname = { :irc_authname => authname }
-        kag_player = find_kag_player(authname)
+        kag_player = Artaius.find_kag_player(authname)
 
         if kag_player
           create_new(kag_player, authname) unless Player.exists?(irc_authname)

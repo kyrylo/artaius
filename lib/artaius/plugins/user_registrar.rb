@@ -25,10 +25,6 @@ module Artaius
     # AutovoicePremiums plugin).
     class UserRegistrar
       include Cinch::Plugin
-      include Artaius::KAGPlayerFinder
-
-      # KAG's official forum.
-      KAG_FORUM_URI = 'https://forum.kag2d.com/'
 
       react_on :private
 
@@ -107,13 +103,15 @@ module Artaius
       # store it into database and then send it to user.
       def create_token(m, kag_name)
         forum_user_page = find_forum_user(m, kag_name)
+        is_premium = Artaius.find_kag_player(kag_name)[:premium]
+
         if forum_user_page
           token = generate_token
           creation_date = Time.now
           Token.create(:requester_authname => m.user.authname,
                        :kag_name           => kag_name,
                        :token              => token,
-                       :premium            => find_kag_player(kag_name)[:premium],
+                       :premium            => is_premium,
                        :created_at         => creation_date,
                        :expires_at         => creation_date + 300)
           send_token_to_player!(m, kag_name, forum_user_page, token)
@@ -135,16 +133,15 @@ module Artaius
         @agent.submit(login_form)
       end
 
-      # Returns page with 
+      # Returns a page with an open empty conversation page, if the forum name
+      # exists. If it's not, Mechanize will raise an error and Artaius will send
+      # a notification to a user, who, wanted to register.
       def find_forum_user(m, forum_name)
         @agent.get(KAG_FORUM_URI + "conversations/add?to=#{forum_name}")
       rescue Mechanize::ResponseCodeError => e
         case e.message
         when /403|404/
-          m.reply Message::NonexistentPlayer[forum_name]
-          nil
-        else
-          puts e
+          m.reply Message::NonexistentPlayer[forum_name] and nil
         end
       end
 
