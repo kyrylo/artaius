@@ -16,7 +16,7 @@ module Artaius
 
     class NonexistentPlayer < Message
       def self.[](*args)
-        "KAG player %s doesn't exist. Did you misspell it? Try again. Yes really!" % [*args]
+        "KAG player %s doesn't exist. Did you misspell it? Try again." % [*args]
       end
     end
 
