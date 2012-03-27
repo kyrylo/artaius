@@ -35,7 +35,9 @@ module Artaius
       # name and has provided existing KAG username with !reg command.
       def execute(m, kag_name)
         if m.user.authed?
-          return m.reply Message::Banned if banned?(m.user.authname)
+          authname = m.user.authname
+
+          return m.reply Message::Banned if banned?(authname)
 
           @agent = Mechanize.new
           @agent.user_agent_alias = 'Linux Mozilla'
@@ -43,7 +45,7 @@ module Artaius
           # Return, if the registered player is trying to register once again.
           if Player.first(:kag_name.ilike(kag_name))
             m.reply Message::AlreadyRegistered[kag_name]
-          elsif Token.requested_before?(requester_authname)
+          elsif Token.requested_before?(:requester_authname => authname)
             m.reply Message::RepeatedRegistrationAttempt
           else
             authorize_bot!
@@ -103,17 +105,19 @@ module Artaius
       # store it into database and then send it to user.
       def create_token(m, kag_name)
         forum_user_page = find_forum_user(m, kag_name)
-        is_premium = Artaius.find_kag_player(kag_name)[:premium]
 
         if forum_user_page
+          is_premium = Artaius.find_kag_player(kag_name)[:premium]
           token = generate_token
           creation_date = Time.now
+
           Token.create(:requester_authname => m.user.authname,
                        :kag_name           => kag_name,
                        :token              => token,
                        :premium            => is_premium,
                        :created_at         => creation_date,
                        :expires_at         => creation_date + 300)
+
           send_token_to_player!(m, kag_name, forum_user_page, token)
           m.reply Message::TokenCreation
         end
