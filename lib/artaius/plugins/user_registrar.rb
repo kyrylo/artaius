@@ -143,10 +143,8 @@ module Artaius
       def find_forum_user(m, forum_name)
         @agent.get(KAG_FORUM_URI + "conversations/add?to=#{forum_name}")
       rescue Mechanize::ResponseCodeError => e
-        case e.message
-        when /403|404/
-          m.reply Message::NonexistentPlayer[forum_name] and nil
-        end
+        m.reply Message::NonexistentPlayer[forum_name] if e.message =~ /403|404/
+        nil
       end
 
       # Sends the token to forum users as a private message.
