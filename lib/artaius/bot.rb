@@ -19,11 +19,12 @@ module Artaius
         c.user     = NICK + ' Lucius'
         c.server   = 'irc.quakenet.org'
         c.port     = 6667
-        c.channels = ['#kag2d.ru-artaius']
+        c.channels = ['#kag2d.ru-artaius', '#kag-artaius']
         c.plugins.plugins = [
           Plugin::QuakenetIdentify,
           Plugin::AutovoicePremiums,
-          Plugin::UserRegistrar
+          Plugin::PlayerRegistrar,
+          Plugin::Unban
         ]
 
         # Set up plugins.
@@ -32,7 +33,7 @@ module Artaius
           :auth_pass => auth_password,
         }
 
-        c.plugins.options[Plugin::UserRegistrar] = {
+        c.plugins.options[Plugin::PlayerRegistrar] = {
           :forum_login => NICK,
           :forum_pass  => forum_password
         }
