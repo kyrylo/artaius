@@ -1,4 +1,4 @@
-require '.lib/artaius/version'
+require './lib/artaius/version'
 
 Gem::Specification.new do |s|
   s.name         = 'artaius'
@@ -17,7 +17,7 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = %W{README.md LICENSE}
   s.rdoc_options     = ["--charset=UTF-8"]
 
-  s.add_runtime_dependency     'cinch', '~>0.2'
+  s.add_runtime_dependency     'cinch', '~>2.0'
   s.add_development_dependency 'rake'
   s.add_development_dependency 'minitest', '>=2.12.1'
 
