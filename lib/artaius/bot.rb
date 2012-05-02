@@ -1,41 +1,41 @@
 module Artaius
   class Bot < Cinch::Bot
 
-    NICK = 'Artaius'
+    # Internal: Name.
+    FIRST_NAME  = 'Artaius'
+
+    # Internal: Surname.
+    SECOND_NAME = 'Lucius'
+
+    # Internal: IRC server to join.
+    SERVER      = 'irc.quakenet.org'
+
+    # Internal: Port of IRC server.
+    PORT        = 6667
+
+    # Internal: Channels, that bot should be present on..
+    CHANNELS    = ['#kag2d.ru-artaius', '#kag-artaius']
 
     def initialize
       super
-      # Since I don't want to tell this cruel world
-      # the password, let's hide it in the abyss.
-      auth_pass_path = 'lib/artaius/plugins/configs/quakenet_identify.yml'
-      forum_pass_path = 'lib/artaius/plugins/configs/user_registrar.yml'
-      auth_password = YAML::load(File.open(auth_pass_path))['auth_password']
-      forum_password = YAML::load(File.open(forum_pass_path))['forum_password']
 
-      # Artaius Lucius configuration.
+      # Bot configuration.
       configure do |c|
-        c.nick     = NICK
-        c.realname = NICK + ' Lucius'
-        c.user     = NICK + ' Lucius'
-        c.server   = 'irc.quakenet.org'
-        c.port     = 6667
-        c.channels = ['#kag2d.ru-artaius', '#kag-artaius']
+        c.nick     = FIRST_NAME
+        c.realname = "#{FIRST_NAME} #{SECOND_NAME}"
+        c.user     = "#{FIRST_NAME} #{SECOND_NAME}"
+        c.server   = SERVER
+        c.port     = PORT
+        c.channels = CHANNELS
         c.plugins.plugins = [
-          Plugin::QuakenetIdentify,
-          Plugin::AutovoicePremiums,
-          Plugin::PlayerRegistrar,
-          Plugin::Unban
+          Cinch::Plugins::Identify
         ]
 
-        # Set up plugins.
-        c.plugins.options[Plugin::QuakenetIdentify] = {
-          :auth_name => NICK,
-          :auth_pass => auth_password,
-        }
-
-        c.plugins.options[Plugin::PlayerRegistrar] = {
-          :forum_login => NICK,
-          :forum_pass  => forum_password
+        # Set up plugins to be used.
+        c.plugins.options[Cinch::Plugins::Identify] = {
+          :username => FIRST_NAME,
+          :password => 'password',
+          :type     => :quakenet
         }
       end
     end
