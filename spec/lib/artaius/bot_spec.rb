@@ -33,23 +33,18 @@ describe Artaius::Bot do
 
       describe 'identify plugin' do
         it 'must contain identify' do
-          bot.config.plugins.plugins.must_include Cinch::Plugins::Identify
+          bot.config.plugins.plugins.must_include Artaius::Plugins::Identify
         end
 
         it 'must have correct username option' do
           bot.config.plugins
-          .options[Cinch::Plugins::Identify][:username].must_equal 'Artaius'
+          .options[Artaius::Plugins::Identify][:username].must_equal 'Artaius'
         end
 
         it 'must have password option' do
           bot.config.plugins
-          .options[Cinch::Plugins::Identify][:password]
+          .options[Artaius::Plugins::Identify][:password]
           .must_be_instance_of String
-        end
-
-        it 'must have correct type option' do
-          bot.config.plugins
-          .options[Cinch::Plugins::Identify][:type].must_equal :quakenet
         end
       end
 

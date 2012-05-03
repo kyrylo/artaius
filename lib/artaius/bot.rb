@@ -8,7 +8,7 @@ module Artaius
     SECOND_NAME = 'Lucius'
 
     # Internal: IRC server to join.
-    SERVER      = 'clanserver4u2.de.quakenet.org'
+    SERVER      = 'irc.quakenet.org'
 
     # Internal: Port of IRC server.
     PORT        = 6667
