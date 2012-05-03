@@ -8,7 +8,7 @@ module Artaius
     SECOND_NAME = 'Lucius'
 
     # Internal: IRC server to join.
-    SERVER      = 'irc.quakenet.org'
+    SERVER      = 'clanserver4u2.de.quakenet.org'
 
     # Internal: Port of IRC server.
     PORT        = 6667
@@ -28,14 +28,13 @@ module Artaius
         c.port     = PORT
         c.channels = CHANNELS
         c.plugins.plugins = [
-          Cinch::Plugins::Identify
+          Artaius::Plugins::Identify
         ]
 
         # Set up plugins to be used.
-        c.plugins.options[Cinch::Plugins::Identify] = {
+        c.plugins.options[Artaius::Plugins::Identify] = {
           :username => FIRST_NAME,
-          :password => 'password',
-          :type     => :quakenet
+          :password => Psych.load_file('config/plugins/identify.yml')[:password]
         }
       end
     end
