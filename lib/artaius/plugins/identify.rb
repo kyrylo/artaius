@@ -31,7 +31,7 @@ module Artaius
 
       # Internal: Authenticate bot with safe CHALLENGEAUTH method.
       #
-      # m - The recieved message.
+      # m         - The recieved message.
       # challenge - The CHALLENGE parameter, given by Q bot.
       #
       # Returns nothing.
