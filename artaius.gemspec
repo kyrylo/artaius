@@ -23,7 +23,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rake'
   s.add_development_dependency 'minitest',     '>=2.12.1'
   s.add_development_dependency 'fivemat',      '>=1.0.0'
-  s.add_development_dependency 'factory_girl', '>=3.2.0'
 
   s.required_ruby_version = '~>1.9'
 
