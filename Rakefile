@@ -1,7 +1,7 @@
 require 'rake/testtask'
 
 Rake::TestTask.new do |t|
-  t.test_files = FileList['spec/lib/artaius/*_spec.rb']
+  t.test_files = FileList['spec/**/*_spec.rb']
   t.verbose    = true
 end
 
