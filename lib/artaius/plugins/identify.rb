@@ -13,12 +13,12 @@ module Artaius
 
 
       listen_to :connect,
-                 method: :identify
+                 method: :send_challenge
 
       # Internal: Identify a bot with Q.
       #
       # Returns nothing.
-      def identify(m)
+      def send_challenge(m)
         debug 'Identifying with Q, using CHALLENGEAUTH'
         User(Q).privmsg('CHALLENGE')
       end
