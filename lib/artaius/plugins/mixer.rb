@@ -25,8 +25,8 @@ module Artaius
       set react_on: :channel
 
       match /game(\s([2-9]|[1-9][0-9]))?$/,
-            method: :start_game,
-            use_suffix: :false
+            method:     :start_game,
+            use_suffix:  false
 
       # Internal: Create new game and add the creator to that game, so he/she
       # will be the first player in that game.
@@ -50,8 +50,8 @@ module Artaius
       end
 
       match /play$/,
-            method: :add_player,
-            use_suffix: :false
+            method:     :add_player,
+            use_suffix:  false
 
       # Internal: Add a new player to the game.
       #
@@ -79,8 +79,8 @@ module Artaius
       end
 
       match /cancel$/,
-            method: :cancel,
-            use_suffix: :false
+            method:     :cancel,
+            use_suffix:  false
 
       # Internal: Remove the user from the game. If the user is the last user in
       # the game, automatically revoke that game.
@@ -103,8 +103,8 @@ module Artaius
       end
 
       match /roster$/,
-            method: :roster,
-            use_suffix: :false
+            method:     :roster,
+            use_suffix:  false
 
       # Internal: Send message about current roster in the mix, if there is any.
       #
@@ -118,8 +118,8 @@ module Artaius
       end
 
       match /start$/,
-            method: :force_start,
-            use_suffix: :false
+            method:     :force_start,
+            use_suffix:  false
 
       # Internal: Start the game by all means.
       #
@@ -134,8 +134,8 @@ module Artaius
 
 
       match /slot(\+|-)(\s([2-9]|[1-9][0-9]))?$/,
-            method: :slot_dispatcher,
-            use_suffix: false
+            method:     :slot_dispatcher,
+            use_suffix:  false
 
       # Internal: Add or remove slot from the current game.
       #
@@ -186,8 +186,8 @@ module Artaius
       end
 
       match /slots$/,
-            method: :slots,
-            use_suffix: false
+            method:     :slots,
+            use_suffix:  false
 
       # Internal: Display information about slots of the current game.
       #
@@ -258,6 +258,11 @@ module Artaius
         @limit -= 1
       end
 
+      # Internal: Check if the quantity of players reached the limit. If so,
+      # that means, we can say "Let's get ready to rumble!".
+      #
+      # Returns true if the quantity of players, that are in game, equals to the
+      # slot limit or false otherwise.
       def ready_to_begin?
         @game.players.size == @limit
       end
