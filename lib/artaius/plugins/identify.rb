@@ -47,9 +47,9 @@ module Artaius
         password = config[:password][0, 10]
 
         sha256 = OpenSSL::Digest::SHA256.new
-        key = sha256.hexdigest("#{username}:#{sha256.hexdigest(password)}")
+        key = sha256.hexdigest("#{ username }:#{ sha256.hexdigest(password) }")
         response = OpenSSL::HMAC.hexdigest('SHA256', key, challenge)
-        User(Q).privmsg("CHALLENGEAUTH #{username} #{response} HMAC-SHA-256")
+        User(Q).privmsg("CHALLENGEAUTH #{ username } #{ response } HMAC-SHA-256")
       end
     end
   end
