@@ -32,7 +32,7 @@ describe Artaius::Plugins::Identify do
     end
 
     it 'must use identify method to handle :connect event' do
-      Identify.listeners[0].method.must_equal :identify
+      Identify.listeners[0].method.must_equal :send_challenge
     end
   end
 
@@ -69,6 +69,7 @@ describe Artaius::Plugins::Identify do
       it 'must match the challengeauth code from Q' do
         pattern.must_match "CHALLENGE a6de7f3e6a8daba5570abc81f4f56474 HMAC-MD5 HMAC-SHA-1 HMAC-SHA-256 LEGACY-MD5"
         pattern.must_match "CHALLENGE a6de7f3e6a8daba5570abc81f4f56474 HMAC-MD5"
+
         pattern.wont_match "CHALLENGE a6de7f3e6a8daba5570abc81f4f56474"
         pattern.wont_match "CHALLENGE"
         pattern.wont_match ""
