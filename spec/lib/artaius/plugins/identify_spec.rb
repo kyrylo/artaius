@@ -8,6 +8,10 @@ describe Artaius::Plugins::Identify do
     Identify.plugin_name.must_equal 'identify'
   end
 
+  it 'must have correct required options' do
+    Identify.required_options.must_equal [:username, :password]
+  end
+
   it "must interact with QuakeNet's bot: Q" do
     Identify::Q.must_equal 'Q@CServe.quakenet.org'
   end
