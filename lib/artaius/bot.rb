@@ -1,4 +1,5 @@
 module Artaius
+
   class Bot < Cinch::Bot
 
     # Internal: Name.
@@ -28,7 +29,8 @@ module Artaius
         c.port     = PORT
         c.channels = CHANNELS
         c.plugins.plugins = [
-          Artaius::Plugins::Identify
+          Artaius::Plugins::Identify,
+          Artaius::Plugins::Mixer
         ]
 
         # Set up plugins to be used.
@@ -37,6 +39,7 @@ module Artaius
           :password => Psych.load_file('config/plugins/identify.yml')[:password]
         }
       end
+
     end
 
   end
