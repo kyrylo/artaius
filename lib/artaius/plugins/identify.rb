@@ -8,6 +8,8 @@ module Artaius
     class Identify
       include Cinch::Plugin
 
+      set :required_options, [:username, :password]
+
       # Internal: Q bot of QuakeNet. Nine times out of ten you write him a PM.
       Q = 'Q@CServe.quakenet.org'
 
