@@ -1,0 +1,31 @@
+---
+identify:
+  send_challenge: "Identifying with Q, using CHALLENGEAUTH"
+  challenge: "[CHALLENGE received] Challenge: %1"
+
+mixer:
+  players: "Players: %1."
+  need_players: !!pl
+    1: "Need 1 more player to start the game."
+    n: "Need %1 more players to start the game"
+  cancel: "%1, you are not in the game anymore."
+  last_left: "The last player has left the game. The game is cancelled."
+  new_initiator: "New game inititator is %1."
+  roster: "Roster: %1."
+  n_slots_added: "%1 slots have been added. %2"
+  slot_added: "Slot added. %1"
+  n_slots_removed: "%1 slots have been removed. %2"
+  slot_removed: "Slot removed. %1"
+  slot_stats: "Slots: %1/%2."
+  blue_team: "Blue team: %1."
+  red_team: "Red team: %1."
+  glhf: "Good luck & have a good fun!"
+  slots_overall: "Total number of slots are %1."
+  m:
+    game: "game"
+    play: "play"
+    cancel: "cancel"
+    roster: "roster"
+    start: "start"
+    slot: "slot"
+    slots: "slots"

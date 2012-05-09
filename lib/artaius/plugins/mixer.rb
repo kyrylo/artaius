@@ -24,7 +24,7 @@ module Artaius
 
       set react_on: :channel
 
-      match /game(\s([2-9]|[1-9][0-9]))?$/,
+      match /#{I18n.mixer.m.game}(\s([2-9]|[1-9][0-9]))?$/,
             method:     :start_game,
             use_suffix:  false
 
@@ -49,7 +49,7 @@ module Artaius
         add_player(m)
       end
 
-      match /play$/,
+      match /#{I18n.mixer.m.play}$/,
             method:     :add_player,
             use_suffix:  false
 
@@ -65,20 +65,19 @@ module Artaius
           @game.players << m.user.nick
 
           need_players = @limit - @game.players.size
-          plural = need_players == 1 ? "" : "s"
 
           if ready_to_begin?
             each_team { |blue, red| begin_game!(m, blue, red) }
           else
-            m.reply "Players: #{show_players}."
-            m.reply "Need #{need_players} more player#{plural} to start the game."
+            m.reply I18n.mixer.players(show_players)
+            m.reply I18n.mixer.need_players(need_players)
           end
 
         end
 
       end
 
-      match /cancel$/,
+      match /#{I18n.mixer.m.cancel}$/,
             method:     :cancel,
             use_suffix:  false
 
@@ -91,18 +90,18 @@ module Artaius
       def cancel(m)
         @game.players.delete(m.user.nick)
         @initiator = @game.players[0]
-        m.reply "#{m.user.nick}, you are not in the game anymore."
+        m.reply I18n.mixer.cancel(m.user.nick)
 
         unless @initiator
           @game = nil
-          m.reply "The last player has left the game. The game has been cancelled."
+          m.reply I18n.mixer.last_left
         else
-          m.reply "New game initiator is #{@initiator}."
+          m.reply I18n.mixer.new_initiator(@initiator)
           m.reply show_players
         end
       end
 
-      match /roster$/,
+      match /#{I18n.mixer.m.roster}$/,
             method:     :roster,
             use_suffix:  false
 
@@ -114,10 +113,10 @@ module Artaius
       def roster(m)
         return unless @game
 
-        m.reply "Roster: #{show_players}."
+        m.reply I18n.mixer.roster(show_players)
       end
 
-      match /start$/,
+      match /#{I18n.mixer.m.start}$/,
             method:     :force_start,
             use_suffix:  false
 
@@ -133,7 +132,7 @@ module Artaius
       end
 
 
-      match /slot(\+|-)(\s([2-9]|[1-9][0-9]))?$/,
+      match /#{I18n.mixer.m.slot}(\+|-)(\s([2-9]|[1-9][0-9]))?$/,
             method:     :slot_dispatcher,
             use_suffix:  false
 
@@ -153,11 +152,11 @@ module Artaius
 
           if slots
             slots.to_i.times { add_slot }
-            m.reply "#{slots} slots have been added. #{slots_message}."
+            m.reply I18n.mixer.n_slots_added(slots, slots_message)
           else
             if @limit >= MIN_SLOTS
               add_slot
-              m.reply "Slot added. #{slots_message}."
+              m.reply I18n.mixer.slot_added(slots_message)
             end
           end
 
@@ -170,11 +169,11 @@ module Artaius
               removed_slots = i+1
               break unless @limit > MIN_SLOTS
             }
-            m.reply "#{removed_slots} slots have been removed. #{slots_message}."
+            m.reply I18n.mixer.n_slots_removed(removed_slots, slots_message)
           else
             if @limit > MIN_SLOTS
               remove_slot
-              m.reply "Slot removed. #{slots_message}."
+              m.reply I18n.mixer.slot_removed(slots_message)
             end
           end
 
@@ -185,7 +184,7 @@ module Artaius
         end
       end
 
-      match /slots$/,
+      match /#{I18n.mixer.m.slots}$/,
             method:     :slots,
             use_suffix:  false
 
@@ -197,7 +196,7 @@ module Artaius
       def slots(m)
         return unless @game
 
-        m.reply "Slots: %s/%s" % [@game.players.size, @limit]
+        m.reply I18n.mixer.slot_stats(@game.players.size, @limit)
       end
 
 
@@ -233,15 +232,15 @@ module Artaius
       #
       # Returns nil.
       def begin_game!(m, blue, red)
-        m.reply "Blue team: #{blue.join(', ')}"
-        m.reply "Red team: #{red.join(', ')}"
-        m.reply "Good luck & have fun!"
+        m.reply I18n.mixer.blue_team(blue.join(', '))
+        m.reply I18n.mixer.red_team(red.join(', '))
+        m.reply I18n.mixer.glhf
 
         @game = nil
       end
 
       def slots_message
-        "Total number of slots are #@limit"
+        I18n.mixer.slots_overall(@limit)
       end
 
       # Internal: Increments game slot.

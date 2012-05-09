@@ -4,6 +4,10 @@ describe Artaius::Plugins::Identify do
 
   Identify = Artaius::Plugins::Identify
 
+  it 'must include required modules' do
+    Identify.must_include Cinch::Plugin
+  end
+
   it "must use correct plugin's name" do
     Identify.plugin_name.must_equal 'identify'
   end

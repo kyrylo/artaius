@@ -1,5 +1,8 @@
 module Artaius
 
+  # Internal: Turn the bot into a polyglot.
+  I18n = R18n.from_env('config/locales/', :ru)
+
   class Bot < Cinch::Bot
 
     # Internal: Name.

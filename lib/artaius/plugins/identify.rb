@@ -21,7 +21,7 @@ module Artaius
       #
       # Returns nothing.
       def send_challenge(m)
-        debug 'Identifying with Q, using CHALLENGEAUTH'
+        debug I18n.identify.send_challenge
         User(Q).privmsg('CHALLENGE')
       end
 
@@ -41,7 +41,7 @@ module Artaius
         # Q is the only trusted user.
         return unless m.user && m.user.nick == 'Q'
 
-        debug "[Challenge recieved] Challenge: #{challenge}"
+        debug I18n.identify.challenge(challenge)
 
         username = config[:username].irc_downcase(:rfc1459)
         password = config[:password][0, 10]

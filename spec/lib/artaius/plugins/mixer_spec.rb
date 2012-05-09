@@ -3,6 +3,10 @@ require_relative '../../../spec_helper'
 describe Artaius::Plugins::Mixer do
   Mixer = Artaius::Plugins::Mixer
 
+  it 'must include required modules' do
+    Identify.must_include Cinch::Plugin
+  end
+
   it "it must use correct plugin's name" do
     Mixer.plugin_name.must_equal 'mixer'
   end
