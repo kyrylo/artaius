@@ -14,6 +14,8 @@ module Artaius
       # Returns Game Struct object.
       Game = Struct.new(:players, :limit, :time)
 
+      Gamer = Struct.new(:irc_nick, :irc_authname, :premium?, :role)
+
       # Internal: Limit to be used, when the op didn't specify the number of
       # players in the mix.
       DEFAULT_LIMIT = 10
@@ -36,7 +38,7 @@ module Artaius
       #
       # Returns nothing.
       def start_game(m, limit)
-        return if @game
+        return if @game or !Player.exists?(m.user.authname)
 
         @limit = if limit && !limit.empty?
           limit.to_i
@@ -45,7 +47,7 @@ module Artaius
         end
 
         @game = Game.new([], limit, Time.now)
-        @initiator = m.user.nick
+        @initiator = create_gamer(m)
         add_player(m)
       end
 
@@ -59,10 +61,10 @@ module Artaius
       #
       # Returns nothing.
       def add_player(m)
-        return unless @game
+        return if !@game or !Player.exists?(m.user.authname)
 
-        unless @game.players.include?(m.user.nick)
-          @game.players << m.user.nick
+        unless @game.players.map(&:irc_authname).include?(m.user.authname)
+          @game.players << create_gamer(m)
 
           need_players = @limit - @game.players.size
 
@@ -88,7 +90,7 @@ module Artaius
       #
       # Returns nothing.
       def cancel(m)
-        @game.players.delete(m.user.nick)
+        @game.players.map(&:irc_authname).delete(m.user.authname)
         @initiator = @game.players[0]
         m.reply I18n.mixer.cancel(m.user.nick)
 
@@ -96,7 +98,7 @@ module Artaius
           @game = nil
           m.reply I18n.mixer.last_left
         else
-          m.reply I18n.mixer.new_initiator(@initiator)
+          m.reply I18n.mixer.new_initiator(@initiator.irc_nick)
           m.reply show_players
         end
       end
@@ -126,7 +128,7 @@ module Artaius
       #
       # Returns nothing.
       def force_start(m)
-        return unless @game && m.user.nick == @initiator
+        return unless @game && m.user.authname == @initiator.irc_authname
 
         each_team { |blue, red| begin_game!(m, blue, red) }
       end
@@ -144,7 +146,7 @@ module Artaius
       #         removed from the game.
       #
       def slot_dispatcher(m, sign, slots)
-        return unless @game && m.user.nick == @initiator
+        return unless @game && m.user.authname == @initiator.irc_authname
 
         case sign
         when '+'
@@ -204,29 +206,27 @@ module Artaius
       #
       # Returns nothing.
       def show_players
-        @game.players.map do |player|
-          colorize_nick(player)
+        @game.players.map do |gamer|
+          colorize_nick(gamer)
         end.join ', '
       end
 
-      # Internal: Colorize given nick. Based on information about player.
+      # Internal: Colorize the nick of given gamer. Based on role of the gamer.
       # Golds are yellow, guards are green and normal are untouched.
       #
-      # nick - The nickname String to be colorized.
+      # nick - The Gamer, which nick should be colorized.
       #
       # Returns colorized nick.
-      def colorize_nick(nick)
-        kag_player = KAG::Player.new(nick)
-
-        if kag_player.gold?
-          case kag_player.role(true)
-          when 'guard'
-            Format(:green, nick)
+      def colorize_nick(gamer)
+        if gamer[:premium?]
+          case gamer.role
+          when 2
+            Format(:green, gamer.irc_nick)
           else
-            Format(:yellow, nick)
+            Format(:yellow, gamer.irc_nick)
           end
         else
-          nick
+          gamer.irc_nick
         end
       end
 
@@ -253,13 +253,19 @@ module Artaius
       #
       # Returns nil.
       def begin_game!(m, blue, red)
-        m.reply I18n.mixer.blue_team(blue.join(', '))
-        m.reply I18n.mixer.red_team(red.join(', '))
+        blue = blue.map { |gamer| colorize_nick(gamer) }.join(', ')
+        red  = red.map { |gamer| colorize_nick(gamer) }.join(', ')
+
+        m.reply I18n.mixer.blue_team(blue)
+        m.reply I18n.mixer.red_team(red)
         m.reply I18n.mixer.glhf
 
         @game = nil
       end
 
+      # Internal: Display slots used/overall number information.
+      #
+      # Returns String.
       def slots_message
         I18n.mixer.slots_overall(@limit)
       end
@@ -285,6 +291,20 @@ module Artaius
       # slot limit or false otherwise.
       def ready_to_begin?
         @game.players.size == @limit
+      end
+
+      # Internal: Create a new gamer. Gamers are persons, that want to play mix.
+      #
+      # Returns Gamer object.
+      def create_gamer(m)
+        player = Player.filter(:irc_authname => m.user.authname).first
+
+        Gamer.new(
+          m.user.nick,
+          m.user.authname,
+          player[:premium],
+          player[:role]
+        )
       end
 
     end
