@@ -131,7 +131,6 @@ module Artaius
         each_team { |blue, red| begin_game!(m, blue, red) }
       end
 
-
       match /#{I18n.mixer.m.slot}(\+|-)(\s([2-9]|[1-9][0-9]))?$/,
             method:     :slot_dispatcher,
             use_suffix:  false
@@ -202,11 +201,34 @@ module Artaius
 
       protected
 
-      # Internal: Show all players in the game.
+      # Internal: Show all players in the game. Colorize some nicks.
       #
       # Returns nothing.
       def show_players
-        @game.players.join ', '
+        @game.players.map do |player|
+          colorize_nick(player)
+        end.join ', '
+      end
+
+      # Internal: Colorize given nick. Based on information about player.
+      # Golds are yellow, guards are green and normal are untouched.
+      #
+      # nick - The nickname String to be colorized.
+      #
+      # Returns colorized nick.
+      def colorize_nick(nick)
+        kag_player = KAG::Player.new(nick)
+
+        if kag_player.gold?
+          case kag_player.role(true)
+          when 'guard'
+            Format(:green, nick)
+          else
+            Format(:yellow, nick)
+          end
+        else
+          nick
+        end
       end
 
       # Internal: Iterate over each team.
