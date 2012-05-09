@@ -198,7 +198,6 @@ module Artaius
         m.reply I18n.mixer.slot_stats(@game.players.size, @limit)
       end
 
-
       protected
 
       # Internal: Show all players in the game. Colorize some nicks.
