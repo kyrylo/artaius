@@ -17,7 +17,7 @@ describe Artaius::Plugins::Archivarius do
   end
 
   describe 'matchers' do
-    let(:reg) { Archivarius.matchers.find { |m| m.method == :reg } }
+    let(:reg) { Archivarius.matchers.find { |m| m.method == :sign_up } }
 
     it 'must have correct number of matchers' do
       Archivarius.matchers.size.must_equal 1
@@ -29,25 +29,25 @@ describe Artaius::Plugins::Archivarius do
       end
 
       it 'must match the pattern' do
-        reg.pattern.must_match 'lol'
-        reg.pattern.must_match 'nick'
-        reg.pattern.must_match 'nickname'
-        reg.pattern.must_match 'awesomenick'
-        reg.pattern.must_match '10nicks'
-        reg.pattern.must_match 'nicks10'
-        reg.pattern.must_match 'ni10cks'
-        reg.pattern.must_match 'yadda_yadda'
-        reg.pattern.must_match 'IaMiDiOt'
+        reg.pattern.must_match 'reg lol'
+        reg.pattern.must_match 'reg nick'
+        reg.pattern.must_match 'reg nickname'
+        reg.pattern.must_match 'reg awesomenick'
+        reg.pattern.must_match 'reg 10nicks'
+        reg.pattern.must_match 'reg nicks10'
+        reg.pattern.must_match 'reg ni10cks'
+        reg.pattern.must_match 'reg yadda_yadda'
+        reg.pattern.must_match 'reg IaMiDiOt'
 
-        reg.pattern.wont_match ' blah'
-        reg.pattern.wont_match 'me'
-        reg.pattern.wont_match 'i'
-        reg.pattern.wont_match 'averylongnicknamereally'
-        reg.pattern.wont_match 'supernick '
-        reg.pattern.wont_match 'fancy 10'
-        reg.pattern.wont_match 'ps[E]udo_player'
-        reg.pattern.wont_match "don'ttellmymother"
-        reg.pattern.wont_match 'yadda-yadda'
+        reg.pattern.wont_match 'reg  blah'
+        reg.pattern.wont_match 'reg me'
+        reg.pattern.wont_match 'reg i'
+        reg.pattern.wont_match 'reg averylongnicknamereally'
+        reg.pattern.wont_match 'reg supernick '
+        reg.pattern.wont_match 'reg fancy 10'
+        reg.pattern.wont_match 'reg ps[E]udo_player'
+        reg.pattern.wont_match "reg don'ttellmymother"
+        reg.pattern.wont_match 'reg yadda-yadda'
       end
 
       it 'does not have suffix' do

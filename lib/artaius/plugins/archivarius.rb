@@ -7,7 +7,7 @@ module Artaius
 
       set react_on: :private
 
-      match /#{I18n.archivarius.m.reg} (\w+{3,20})$/,
+      match /#{I18n.archivarius.m.reg} (\w{3,20})$/,
             method:     :sign_up,
             use_suffix:  false
 
