@@ -1,8 +1,3 @@
-require 'rake/testtask'
-
-Rake::TestTask.new do |t|
-  t.test_files = FileList['spec/**/*_spec.rb']
-  t.verbose    = true
-end
+FileList['tasks/*.rake'].each { |t| import t }
 
 task :default => :test
