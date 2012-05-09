@@ -33,7 +33,8 @@ module Artaius
         c.channels = CHANNELS
         c.plugins.plugins = [
           Artaius::Plugins::Identify,
-          Artaius::Plugins::Mixer
+          Artaius::Plugins::Mixer,
+          Artaius::Plugins::Archivarius
         ]
 
         # Set up plugins to be used.

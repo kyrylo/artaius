@@ -29,3 +29,11 @@ mixer:
     start: "start"
     slot: "slot"
     slots: "slots"
+
+archivarius:
+  exists: "%1, you are already registered and bonded your KAG account and IRC authname (%2)."
+  not_found: "Player %1 does not exist. Did you make a typing error?"
+  authname_required: "In order to bond your KAG account and IRC authname, you need to authorize on this server or register your nickname"
+  success: "Yay, registration complete! Enjoy KAG ;-)"
+  m:
+    reg: "reg"
