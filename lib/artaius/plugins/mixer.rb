@@ -150,7 +150,6 @@ module Artaius
       def force_start(m)
         return unless @game && m.user.authname == @initiator.irc_authname
 
-        @timer.stop
         each_team { |blue, red| begin_game!(m, blue, red) }
       end
 
@@ -274,6 +273,8 @@ module Artaius
       #
       # Returns nil.
       def begin_game!(m, blue, red)
+        @timer.stop
+
         blue = blue.map { |gamer| colorize_nick(gamer) }.join(', ')
         red  = red.map { |gamer| colorize_nick(gamer) }.join(', ')
 
