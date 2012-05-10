@@ -4,7 +4,7 @@ module Artaius
     class Mixer
       include Cinch::Plugin
 
-      # Internal: Create the new game.
+      # Internal: Create a new game.
       #
       # players - The Enumerable of players (Set or Array).
       # limit   - The Integer, describes the needed quantity of players, in
@@ -14,6 +14,14 @@ module Artaius
       # Returns Game Struct object.
       Game = Struct.new(:players, :limit, :time)
 
+      # Internal: Create a new gamer. Gamer is a player, which wants to play a
+      # mix.
+      #
+      # irc_nick     - The String, representing gamer's IRC nickname.
+      # irc_authname - The String, representing gamer's IRC authname.
+      # role         - The Integer, representing KAG player's role
+      #
+      # Returns Gamer object.
       Gamer = Struct.new(:irc_nick, :irc_authname, :premium?, :role)
 
       # Internal: Limit to be used, when the op didn't specify the number of
@@ -22,6 +30,10 @@ module Artaius
 
       # Internal: Minimal number of slots needed to be able to play the game.
       MIN_SLOTS = 2
+
+      # Internal: Delay between the beginning of game and its ending (in
+      # seconds).
+      PENDING_DELAY = 300
 
 
       set react_on: :channel
@@ -77,6 +89,12 @@ module Artaius
 
         end
 
+        @timer.stop if @timer
+
+        @timer = Timer(PENDING_DELAY, :shots => 1) do
+          @game = nil
+          Channel(m.channel.name).send I18n.mixer.game_cancelled
+        end
       end
 
       match /#{I18n.mixer.m.cancel}$/,
@@ -90,6 +108,8 @@ module Artaius
       #
       # Returns nothing.
       def cancel(m)
+        player = @game.players.select { }
+        @game.players.delete(@game.players.find {|p| p.irc_authname = m.user.authname })
         @game.players.map(&:irc_authname).delete(m.user.authname)
         @initiator = @game.players[0]
         m.reply I18n.mixer.cancel(m.user.nick)
@@ -130,6 +150,7 @@ module Artaius
       def force_start(m)
         return unless @game && m.user.authname == @initiator.irc_authname
 
+        @timer.stop
         each_team { |blue, red| begin_game!(m, blue, red) }
       end
 

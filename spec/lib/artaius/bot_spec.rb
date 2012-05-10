@@ -26,7 +26,7 @@ describe Artaius::Bot do
     end
 
     it 'must have correct channels to join' do
-      bot.config.channels.must_equal %w{ #kag2d.ru-artaius #kag-artaius }
+      bot.config.channels.must_equal %w{ #kag2d.ru }
     end
 
     describe 'plugins' do

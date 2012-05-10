@@ -22,6 +22,14 @@ describe Artaius::Plugins::Mixer do
   describe 'game' do
     let(:game) { Mixer::Game.new([], 10, Time.parse('2012-05-08 11:47:16 +0300')) }
 
+    it 'must have correct number of minimum slots to start the game' do
+      Mixer::MIN_SLOTS.must_equal 2
+    end
+
+    it 'must have correct delay, when game cannot start for a long time' do
+      Mixer::PENDING_DELAY.must_equal 300
+    end
+
     it 'must have players attribute' do
       game.players.wont_be_nil
     end

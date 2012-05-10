@@ -21,6 +21,7 @@ mixer:
   red_team: "Red team: %1."
   glhf: "Good luck & have a good fun!"
   slots_overall: "Total number of slots are %1."
+  game_cancelled: "The game has been cancelled due to shortage of players."
   m:
     game: "game"
     play: "play"

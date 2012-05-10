@@ -18,7 +18,7 @@ module Artaius
     PORT        = 6667
 
     # Internal: Channels, that bot should be present on..
-    CHANNELS    = ['#kag2d.ru-artaius', '#kag-artaius']
+    CHANNELS    = ['#kag2d.ru']
 
     def initialize
       super
