@@ -6,7 +6,8 @@
 Description
 -----------
 
-Artaius will be a [King Arthur's Gold][kag] (KAG) IRC bot.
+Artaius is a [King Arthur's Gold][kag] (KAG) IRC bot. Currently it's not
+suitable for a public use. Artaius dwells at #kag2d.ru@irc.quakenet.org.
 
 License
 -------
