@@ -108,13 +108,14 @@ module Artaius
       #
       # Returns nothing.
       def cancel(m)
-        player = @game.players.select { }
-        @game.players.delete(@game.players.find {|p| p.irc_authname = m.user.authname })
-        @game.players.map(&:irc_authname).delete(m.user.authname)
+        player = @game.players.find { |p| p.irc_authname == m.user.authname}
+        @game.players.delete(player)
+
         @initiator = @game.players[0]
         m.reply I18n.mixer.cancel(m.user.nick)
 
         unless @initiator
+          @timer.stop
           @game = nil
           m.reply I18n.mixer.last_left
         else
