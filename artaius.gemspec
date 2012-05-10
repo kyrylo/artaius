@@ -19,6 +19,9 @@ Gem::Specification.new do |s|
 
   s.add_runtime_dependency     'cinch',        '~>2.0'
   s.add_runtime_dependency     'kag',          '0.0.1'
+  s.add_runtime_dependency     'r18n-desktop', '>=0.4.14'
+	s.add_runtime_dependency     'sequel',       '>=3.34.1'
+	s.add_runtime_dependency     'sqlite3',      '>=1.3.6'
 
   s.add_development_dependency 'rake'
   s.add_development_dependency 'minitest',     '>=2.12.1'
