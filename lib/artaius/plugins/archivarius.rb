@@ -50,11 +50,13 @@ module Artaius
 
       protected
 
-      # Internal: Ask database for whether the IRC authname is in it or not.
+      # Internal: Check database for given authname.
       #
-      # Returns true, if the IRC authname is there of false otherwise.
+      # irc_authname - The String, represents IRC authname of the player.
+      #
+      # Returns true if the given authname is in database or false otherwise.
       def already_exists?(irc_authname)
-        Player.exists?(irc_authname)
+        Player.filter(:irc_authname => irc_authname).select(:irc_authname).any?
       end
 
     end
