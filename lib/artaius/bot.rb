@@ -35,7 +35,8 @@ module Artaius
           Artaius::Plugins::Identify,
           Artaius::Plugins::Mixer,
           Artaius::Plugins::Archivarius,
-          Artaius::Plugins::Autovoicer
+          Artaius::Plugins::Autovoicer,
+          Artaius::Plugins::Autoopper
         ]
 
         # Set up plugins to be used.
