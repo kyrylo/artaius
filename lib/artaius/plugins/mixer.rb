@@ -35,7 +35,6 @@ module Artaius
       # seconds).
       PENDING_DELAY = 300
 
-
       set react_on: :channel
 
       match /#{I18n.mixer.m.game}(\s([2-9]|[1-9][0-9]))?$/,
