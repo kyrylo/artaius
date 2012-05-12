@@ -91,10 +91,12 @@ module Artaius
 
         @timer.stop if @timer
 
-        @timer = Timer(PENDING_DELAY, :shots => 1) do
+        @timer ||= Timer(PENDING_DELAY, shots: 1, start_automatically: false) do
           @game = nil
           Channel(m.channel.name).send I18n.mixer.game_cancelled
         end
+
+        @timer.start
       end
 
       match /#{I18n.mixer.m.cancel}$/,
