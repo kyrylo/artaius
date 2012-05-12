@@ -34,7 +34,8 @@ module Artaius
         c.plugins.plugins = [
           Artaius::Plugins::Identify,
           Artaius::Plugins::Mixer,
-          Artaius::Plugins::Archivarius
+          Artaius::Plugins::Archivarius,
+          Artaius::Plugins::Autovoicer
         ]
 
         # Set up plugins to be used.
