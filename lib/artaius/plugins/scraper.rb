@@ -10,12 +10,14 @@ module Artaius
                  method: :scrap_links
 
       def scrap_links(m)
-        agent = Mechanize.new
-        agent.user_agent_alias = 'Linux Firefox'
+        unless @agent
+          @agent = Mechanize.new
+          @agent.user_agent_alias = 'Linux Firefox'
+        end
 
         URI.extract(m.message, %w[http https]) do |link|
           begin
-            page = agent.get(link)
+            page = @agent.get(link)
             uri = URI.parse(link)
           rescue Mechanize::ResponseCodeError
             m.reply I18n.scraper.broken_link and next
