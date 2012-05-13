@@ -38,3 +38,9 @@ archivarius:
   success: "Yay, registration complete! Enjoy KAG ;-)"
   m:
     reg: "reg"
+
+scraper:
+  broken_link: "Uh oh! The link you just posted is broken."
+  title: "Title: %1"
+  h:
+    kag_forum: "KAG's forum: %1"

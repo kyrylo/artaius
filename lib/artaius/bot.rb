@@ -36,7 +36,8 @@ module Artaius
           Artaius::Plugins::Mixer,
           Artaius::Plugins::Archivarius,
           Artaius::Plugins::Autovoicer,
-          Artaius::Plugins::Autoopper
+          Artaius::Plugins::Autoopper,
+          Artaius::Plugins::Scraper
         ]
 
         # Set up plugins to be used.
