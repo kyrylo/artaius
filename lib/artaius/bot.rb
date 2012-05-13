@@ -37,7 +37,8 @@ module Artaius
           Artaius::Plugins::Archivarius,
           Artaius::Plugins::Autovoicer,
           Artaius::Plugins::Autoopper,
-          Artaius::Plugins::Scraper
+          Artaius::Plugins::Scraper,
+          Artaius::Plugins::NewsFetcher
         ]
 
         # Set up plugins to be used.

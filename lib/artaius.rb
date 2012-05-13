@@ -10,6 +10,7 @@ require_relative 'artaius/version'
 
 require_relative 'artaius/database'
 require_relative 'artaius/models/player'
+require_relative 'artaius/models/news'
 
 require_relative 'artaius/plugins/identify'
 require_relative 'artaius/plugins/mixer'
@@ -17,3 +18,4 @@ require_relative 'artaius/plugins/archivarius'
 require_relative 'artaius/plugins/autovoicer'
 require_relative 'artaius/plugins/autoopper'
 require_relative 'artaius/plugins/scraper'
+require_relative 'artaius/plugins/news_fetcher'

@@ -44,3 +44,10 @@ scraper:
   title: "Title: %1"
   h:
     kag_forum: "KAG's forum: %1"
+
+news_fetcher:
+  news: "News! %1 writes: \"%2\" → %3"
+  latest_news: "On %1 %2 wrote a post: \"%3\"."
+  read_post: "Read post: %1"
+  m:
+    news: "news"
