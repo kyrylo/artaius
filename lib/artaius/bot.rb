@@ -38,7 +38,8 @@ module Artaius
           Artaius::Plugins::Autovoicer,
           Artaius::Plugins::Autoopper,
           Artaius::Plugins::Scraper,
-          Artaius::Plugins::NewsFetcher
+          Artaius::Plugins::NewsFetcher,
+          Artaius::Plugins::Informator
         ]
 
         # Set up plugins to be used.

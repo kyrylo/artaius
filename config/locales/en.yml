@@ -51,3 +51,20 @@ news_fetcher:
   read_post: "Read post: %1"
   m:
     news: "news"
+
+informator:
+  kag_site: "https://www.kag2d.com/"
+  kag_wiki: "https://wiki.kag2d.com/"
+  kag_forum: "https://forum.kag2d.com/"
+  kag_manual: "https://kag2d.com/en/manual/"
+  kag_blog: "http://devlog.kag2d.com/"
+  kag_download: "https://kag2d.com/en/download/"
+  kag_bug_tracker: "https://bugs.kag2d.com/"
+  m:
+    site: "site"
+    wiki: "wiki"
+    forum: "forums"
+    manual: "manual"
+    blog: "blog"
+    download: "download"
+    bug_tracker: "bugs"
