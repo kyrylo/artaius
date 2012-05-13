@@ -49,7 +49,7 @@ module Artaius
       #
       # Returns nothing.
       def start_game(m, limit)
-        return if @game or !Player.exists?(m.user.authname)
+        return if @game or !already_exists?(m.user.authname)
 
         @limit = if limit && !limit.empty?
           limit.to_i
@@ -72,7 +72,7 @@ module Artaius
       #
       # Returns nothing.
       def add_player(m)
-        return if !@game or !Player.exists?(m.user.authname)
+        return if !@game or !already_exists?(m.user.authname)
 
         unless @game.players.map(&:irc_authname).include?(m.user.authname)
           @game.players << create_gamer(m)
@@ -85,7 +85,6 @@ module Artaius
             m.reply I18n.mixer.players(show_players)
             m.reply I18n.mixer.need_players(need_players)
           end
-
         end
 
         @timer.stop if @timer
@@ -329,6 +328,15 @@ module Artaius
           player[:premium],
           player[:role]
         )
+      end
+
+      # Internal: Check database for given authname.
+      #
+      # irc_authname - The String, represents IRC authname of the player.
+      #
+      # Returns true if the given authname is in database or false otherwise.
+      def already_exists?(irc_authname)
+        Player.filter(:irc_authname => irc_authname).select(:irc_authname).any?
       end
 
     end
