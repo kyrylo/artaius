@@ -36,6 +36,7 @@ archivarius:
   not_found: "Player %1 does not exist. Did you make a typing error?"
   authname_required: "In order to bond your KAG account and IRC authname, you need to authorize on this server or register your nickname"
   success: "Yay, registration complete! Enjoy KAG ;-)"
+  new_user: "%1 (aka %2 in the game) is a registered player from now on."
   m:
     reg: "reg"
 

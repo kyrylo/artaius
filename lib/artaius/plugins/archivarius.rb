@@ -46,6 +46,9 @@ module Artaius
         )
 
         m.reply I18n.archivarius.success
+        Bot::CHANNELS.each do |chan|
+          Channel(chan).send I18n.archivarius.new_user(nick, player.username)
+        end
       end
 
       protected
