@@ -60,6 +60,7 @@ informator:
   kag_blog: "http://devlog.kag2d.com/"
   kag_download: "https://kag2d.com/en/download/"
   kag_bug_tracker: "https://bugs.kag2d.com/"
+  version: "Current: %1 (%2)."
   m:
     site: "site"
     wiki: "wiki"
@@ -68,3 +69,4 @@ informator:
     blog: "blog"
     download: "download"
     bug_tracker: "bugs"
+    version: "version"
