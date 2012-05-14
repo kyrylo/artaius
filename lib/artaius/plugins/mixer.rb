@@ -79,22 +79,24 @@ module Artaius
 
           need_players = @limit - @game.players.size
 
+          if @timer
+            @timer.stop
+          else
+            @timer = Timer(PENDING_DELAY, shots: 1, start_automatically: false) do
+              @game = nil
+              Channel(m.channel.name).send I18n.mixer.game_cancelled
+            end
+          end
+
           if ready_to_begin?
             each_team { |blue, red| begin_game!(m, blue, red) }
           else
+            @timer.start
+
             m.reply I18n.mixer.players(show_players)
             m.reply I18n.mixer.need_players(need_players)
           end
         end
-
-        @timer.stop if @timer
-
-        @timer ||= Timer(PENDING_DELAY, shots: 1, start_automatically: false) do
-          @game = nil
-          Channel(m.channel.name).send I18n.mixer.game_cancelled
-        end
-
-        @timer.start
       end
 
       match /#{I18n.mixer.m.cancel}$/,
