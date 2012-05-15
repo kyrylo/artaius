@@ -82,8 +82,10 @@ module Artaius
       # Returns the transformed String.
       def reveal_author(nick)
         case nick
-        when 'lddev'      then 'MM'
-        when '1bardesign' then 'Geti'
+        when 'lddev'           then 'MM'
+        when '1bardesign'      then 'Geti'
+        when 'flieslikeabrick' then 'FliesLikeABrick'
+        else I18n.news_fetcher.someone
         end
       end
 
